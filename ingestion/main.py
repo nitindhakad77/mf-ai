@@ -1,0 +1,45 @@
+import os, hashlib, datetime
+from mongo import get_collection
+from dotenv import load_dotenv
+import os
+
+load_dotenv()   # <-- required
+
+MONGO_URI = os.getenv("MONGO_URI")
+
+LOG_DIR = os.path.join(os.path.dirname(__file__), "..", "sample_logs")
+
+def sha256(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8", errors="ignore")).hexdigest()
+
+def ingest_once():
+    print("DB:", os.getenv("MONGO_URI"))
+    col = get_collection()
+
+    for fname in os.listdir(LOG_DIR):
+        path = os.path.join(LOG_DIR, fname)
+        if not os.path.isfile(path):
+            continue
+
+        with open(path, "r", errors="ignore") as f:
+            content = f.read()
+
+        h = sha256(content)
+
+        # idempotency check
+        if col.find_one({"content_hash": h}):
+            continue
+
+        doc = {
+            "source": "sample_mainframe",
+            "log_type": fname.split(".")[0],
+            "filename": fname,
+            "content": content,
+            "content_hash": h,
+            "ingested_at": datetime.datetime.utcnow(),
+            "status": "raw",
+        }
+        col.insert_one(doc)
+
+if __name__ == "__main__":
+    ingest_once()
