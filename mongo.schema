@@ -1,0 +1,9 @@
+{
+  "source": "sample_mainframe",
+  "log_type": "syslog",
+  "filename": "syslog.log",
+  "content": "....raw log text....",
+  "ingested_at": "UTC timestamp",
+  "content_hash": "sha256...",
+  "status": "raw"
+}
