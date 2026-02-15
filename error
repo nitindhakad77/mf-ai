@@ -1,1 +1,36 @@
 ervers: [<ServerDescription ('ac-5khrzn7-shard-00-00.mg8ijjb.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('SSL handshake failed: ac-5khrzn7-shard-00-00.mg8ijjb.mongodb.net:27017: [WinError 10054] An existing connection was forcibly closed by the remote host (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>, <ServerDescription ('ac-5khrzn7-shard-00-01.mg8ijjb.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('SSL handshake failed: ac-5khrzn7-shard-00-01.mg8ijjb.mongodb.net:27017: [WinError 10054] An existing connection was forcibly closed by the remote host (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>, <ServerDescription ('ac-5khrzn7-shard-00-02.mg8ijjb.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('SSL handshake failed: ac-5khrzn7-shard-00-02.mg8ijjb.mongodb.net:27017: [WinError 10054] An existing connection was forcibly closed by the remote host (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>
+Core dev tools
+
+Python 3.10+ (recommended) + venv
+Git (version control)
+Docker + Docker Compose (run MongoDB/PostgreSQL locally consistently)
+VS Code (or your preferred IDE)
+
+Datastores
+
+MongoDB: raw, unstructured logs (Week 1)
+PostgreSQL: summaries + metadata (Week 2)
+
+Python libraries you’ll use
+Week 1
+
+pymongo (MongoDB client) — insert raw logs using insert_one() (MongoDB docs show usage) [mongodb.com], [pymongo.re...thedocs.io]
+apscheduler (scheduling ingestion jobs) — BlockingScheduler runs in foreground and blocks on start() [apschedule...thedocs.io]
+(Optional) watchdog if you want file system event-based ingestion instead of interval schedule (suggestion)
+
+Week 2
+
+LLM SDKs:
+
+AWS Bedrock: boto3 + Bedrock Runtime InvokeModel [docs.aws.amazon.com], [docs.aws.amazon.com]
+GCP Gemini: either google-cloud-aiplatform (Vertex AI Generative SDK) or google-genai (new unified SDK) [cloud.google.com], [docs.cloud...google.com], [googleapis.github.io]
+
+
+psycopg2 or asyncpg (Postgres client)
+pydantic (data models & validation)
+(Optional) tiktoken or heuristic chunking
+
+Week 3
+
+fastapi + uvicorn (API server) — FastAPI recommends running with an ASGI server like Uvicorn; FastAPI provides fastapi run as well [fastapi.tiangolo.com]
+(Optional) RAG libs like LangChain — not required for POC; you can do simple retrieval manually (suggestion)
