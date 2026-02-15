@@ -1,11 +1,11 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
-from main import ingest_once
+from main import ingest_images
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job("interval", minutes=5)
+@sched.scheduled_job("interval", seconds=30)
 def job():
-    ingest_once()
+    ingest_images()
 
 if __name__ == "__main__":
     sched.start()
