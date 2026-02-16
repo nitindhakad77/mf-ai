@@ -1,14 +1,25 @@
 import os
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from db import latest, search
+from store import latest, search
 from rag import answer
 
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "..", ".env"))
 
-app = FastAPI(title="POC MF AI API")
+app = FastAPI(title="POC MF AI API (MongoDB Only)")
+
+origins_env = os.getenv("CORS_ORIGINS", "http://localhost:5173")
+origins = [o.strip() for o in origins_env.split(",") if o.strip()]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class ChatRequest(BaseModel):
